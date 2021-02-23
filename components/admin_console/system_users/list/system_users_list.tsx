@@ -293,7 +293,7 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
                 return (
                     <FormattedMessage
                         id='system_users_list.countPage'
-                        defaultMessage='{startCount, number} - {endCount, number} {count, plural, one {user} other {users}} of {total, number} total'
+                        defaultMessage='{endCount, number} {count, plural, one {user} other {users}} of {total, number} total'
                         values={{
                             count,
                             startCount: startCount + 1,

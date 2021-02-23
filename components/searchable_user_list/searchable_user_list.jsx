@@ -12,6 +12,8 @@ import QuickInput from 'components/quick_input';
 import UserList from 'components/user_list.jsx';
 import LocalizedInput from 'components/localized_input/localized_input';
 
+import InfiniteScroll from '../common/infinite_scroll.jsx';
+
 import {t} from 'utils/i18n';
 
 const NEXT_BUTTON_TIMEOUT = 500;
@@ -77,8 +79,8 @@ class SearchableUserList extends React.PureComponent {
         clearTimeout(this.nextTimeoutId);
     }
 
-    nextPage = (e) => {
-        e.preventDefault();
+    nextPage = () => {
+        // e.preventDefault();
 
         this.setState({nextDisabled: true});
         this.nextTimeoutId = setTimeout(() => this.setState({nextDisabled: false}), NEXT_BUTTON_TIMEOUT);
@@ -181,7 +183,7 @@ class SearchableUserList extends React.PureComponent {
                 pageEnd = this.props.users.length;
             }
 
-            usersToDisplay = this.props.users.slice(pageStart, pageEnd);
+            usersToDisplay = this.props.users.slice(0, pageEnd);
 
             if (pageEnd < this.props.total) {
                 nextButton = (
@@ -260,20 +262,26 @@ class SearchableUserList extends React.PureComponent {
                     </div>
                 </div>
                 <div className='more-modal__list'>
-                    <UserList
-                        ref='userList'
-                        users={usersToDisplay}
-                        extraInfo={this.props.extraInfo}
-                        actions={this.props.actions}
-                        actionProps={this.props.actionProps}
-                        actionUserProps={this.props.actionUserProps}
-                        rowComponentType={this.props.rowComponentType}
-                        isDisabled={this.props.isDisabled}
-                    />
-                </div>
-                <div className='filter-controls'>
-                    {previousButton}
-                    {nextButton}
+                    <InfiniteScroll
+                        callBack={this.nextPage}
+                        styleClass='filtered-user-all'
+                        totalItems={this.props.total}
+                        itemsPerPage={this.props.usersPerPage}
+                        bufferValue={280}
+                        pageNumber={this.props.page}
+                        loaderStyle={{padding: '0px', height: '40px'}}
+                    >
+                        <UserList
+                            ref='userList'
+                            users={usersToDisplay}
+                            extraInfo={this.props.extraInfo}
+                            actions={this.props.actions}
+                            actionProps={this.props.actionProps}
+                            actionUserProps={this.props.actionUserProps}
+                            rowComponentType={this.props.rowComponentType}
+                            isDisabled={this.props.isDisabled}
+                        />
+                    </InfiniteScroll>
                 </div>
             </div>
         );

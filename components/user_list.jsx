@@ -50,7 +50,7 @@ export default class UserList extends React.PureComponent {
         if (users == null) {
             return <LoadingScreen/>;
         } else if (users.length > 0) {
-            content = users.map((user, index) => {
+            return users.map((user, index) => {
                 return (
                     <RowComponentType
                         key={user.id}
@@ -66,26 +66,20 @@ export default class UserList extends React.PureComponent {
                     />
                 );
             });
-        } else {
-            content = (
-                <div
-                    key='no-users-found'
-                    className='more-modal__placeholder-row'
-                    data-testid='noUsersFound'
-                >
-                    <p>
-                        <FormattedMessage
-                            id='user_list.notFound'
-                            defaultMessage='No users found'
-                        />
-                    </p>
-                </div>
-            );
         }
 
         return (
-            <div ref={this.containerRef}>
-                {content}
+            <div
+                key='no-users-found'
+                className='more-modal__placeholder-row'
+                data-testid='noUsersFound'
+            >
+                <p>
+                    <FormattedMessage
+                        id='user_list.notFound'
+                        defaultMessage='No users found'
+                    />
+                </p>
             </div>
         );
     }
