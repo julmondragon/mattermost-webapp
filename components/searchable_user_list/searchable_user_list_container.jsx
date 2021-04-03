@@ -33,10 +33,10 @@ export default class SearchableUserListContainer extends React.PureComponent {
         this.setState({term});
     }
 
-    nextPage = () => {
+    nextPage = async () => {
         this.setState({page: this.state.page + 1});
 
-        this.props.nextPage(this.state.page + 1);
+        await this.props.nextPage(this.state.page + 1);
     }
 
     previousPage = () => {

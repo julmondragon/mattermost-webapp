@@ -46,26 +46,23 @@ export default class UserList extends React.PureComponent {
         const users = this.props.users;
         const RowComponentType = this.props.rowComponentType;
 
-        let content;
         if (users == null) {
             return <LoadingScreen/>;
         } else if (users.length > 0) {
-            return users.map((user, index) => {
-                return (
-                    <RowComponentType
-                        key={user.id}
-                        user={user}
-                        extraInfo={this.props.extraInfo[user.id]}
-                        actions={this.props.actions}
-                        actionProps={this.props.actionProps}
-                        actionUserProps={this.props.actionUserProps[user.id]}
-                        index={index}
-                        totalUsers={users.length}
-                        userCount={(index >= 0 && index < Constants.TEST_ID_COUNT) ? index : -1}
-                        isDisabled={this.props.isDisabled}
-                    />
-                );
-            });
+            return users.map((user, index) => (
+                <RowComponentType
+                    key={user.id}
+                    user={user}
+                    extraInfo={this.props.extraInfo[user.id]}
+                    actions={this.props.actions}
+                    actionProps={this.props.actionProps}
+                    actionUserProps={this.props.actionUserProps[user.id]}
+                    index={index}
+                    totalUsers={users.length}
+                    userCount={(index >= 0 && index < Constants.TEST_ID_COUNT) ? index : -1}
+                    isDisabled={this.props.isDisabled}
+                />
+            ));
         }
 
         return (

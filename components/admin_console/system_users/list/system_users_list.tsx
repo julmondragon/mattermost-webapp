@@ -99,10 +99,10 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         return null;
     }
 
-    nextPage = () => {
+    nextPage = async () => {
         this.setState({page: this.state.page + 1});
 
-        this.props.nextPage(this.state.page + 1);
+        await this.props.nextPage(this.state.page + 1);
     }
 
     previousPage = () => {

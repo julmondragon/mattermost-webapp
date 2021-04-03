@@ -79,14 +79,15 @@ class SearchableUserList extends React.PureComponent {
         clearTimeout(this.nextTimeoutId);
     }
 
-    nextPage = () => {
+    nextPage = async () => {
         // e.preventDefault();
 
-        this.setState({nextDisabled: true});
-        this.nextTimeoutId = setTimeout(() => this.setState({nextDisabled: false}), NEXT_BUTTON_TIMEOUT);
+        // this.setState({nextDisabled: true});
+        // this.nextTimeoutId = setTimeout(() => this.setState({nextDisabled: false}), NEXT_BUTTON_TIMEOUT);
 
-        this.props.nextPage();
-        $(ReactDOM.findDOMNode(this.refs.channelListScroll)).scrollTop(0);
+        await this.props.nextPage();
+
+        // $(ReactDOM.findDOMNode(this.refs.channelListScroll)).scrollTop(0);
     }
 
     previousPage = (e) => {
@@ -261,15 +262,15 @@ class SearchableUserList extends React.PureComponent {
                         </span>
                     </div>
                 </div>
-                <div className='more-modal__list'>
+                <div className='more-modal__list filtered-user-content'>
                     <InfiniteScroll
                         callBack={this.nextPage}
                         styleClass='filtered-user-all'
                         totalItems={this.props.total}
                         itemsPerPage={this.props.usersPerPage}
-                        bufferValue={280}
+                        bufferValue={1500}
                         pageNumber={this.props.page}
-                        loaderStyle={{padding: '0px', height: '40px'}}
+                        loaderStyle={{padding: '0px', height: '40px', 'min-height': '40px'}}
                     >
                         <UserList
                             ref='userList'
