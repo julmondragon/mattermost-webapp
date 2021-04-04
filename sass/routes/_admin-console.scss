@@ -364,6 +364,11 @@
 
         .more-modal__list {
             overflow: visible;
+
+            .filtered-user-all {
+                overflow-y: auto;
+                min-height: 0;
+            }
         }
 
         .more-modal__row {

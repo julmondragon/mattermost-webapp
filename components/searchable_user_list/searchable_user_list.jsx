@@ -2,19 +2,16 @@
 // See LICENSE.txt for license information.
 /* eslint-disable react/no-string-refs */
 
-import $ from 'jquery';
 import PropTypes from 'prop-types';
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {FormattedMessage, injectIntl} from 'react-intl';
 
+import InfiniteScroll from '../common/infinite_scroll.jsx';
 import QuickInput from 'components/quick_input';
 import UserList from 'components/user_list.jsx';
 import LocalizedInput from 'components/localized_input/localized_input';
 
 import {t} from 'utils/i18n';
-
-const NEXT_BUTTON_TIMEOUT = 500;
 
 class SearchableUserList extends React.PureComponent {
     static propTypes = {
@@ -23,7 +20,6 @@ class SearchableUserList extends React.PureComponent {
         total: PropTypes.number,
         extraInfo: PropTypes.object,
         nextPage: PropTypes.func.isRequired,
-        previousPage: PropTypes.func.isRequired,
         search: PropTypes.func.isRequired,
         actions: PropTypes.arrayOf(PropTypes.func),
         actionProps: PropTypes.object,
@@ -53,16 +49,6 @@ class SearchableUserList extends React.PureComponent {
         focusOnMount: false,
     };
 
-    constructor(props) {
-        super(props);
-
-        this.nextTimeoutId = 0;
-
-        this.state = {
-            nextDisabled: false,
-        };
-    }
-
     componentDidMount() {
         this.focusSearchBar();
     }
@@ -73,25 +59,10 @@ class SearchableUserList extends React.PureComponent {
         }
     }
 
-    componentWillUnmount() {
-        clearTimeout(this.nextTimeoutId);
-    }
+    nextPage = async () => {
+        const {nextPage} = this.props;
 
-    nextPage = (e) => {
-        e.preventDefault();
-
-        this.setState({nextDisabled: true});
-        this.nextTimeoutId = setTimeout(() => this.setState({nextDisabled: false}), NEXT_BUTTON_TIMEOUT);
-
-        this.props.nextPage();
-        $(ReactDOM.findDOMNode(this.refs.channelListScroll)).scrollTop(0);
-    }
-
-    previousPage = (e) => {
-        e.preventDefault();
-
-        this.props.previousPage();
-        $(ReactDOM.findDOMNode(this.refs.channelListScroll)).scrollTop(0);
+        await nextPage();
     }
 
     focusSearchBar = () => {
@@ -167,8 +138,6 @@ class SearchableUserList extends React.PureComponent {
     }
 
     render() {
-        let nextButton;
-        let previousButton;
         let usersToDisplay;
         const {formatMessage} = this.props.intl;
 
@@ -181,38 +150,7 @@ class SearchableUserList extends React.PureComponent {
                 pageEnd = this.props.users.length;
             }
 
-            usersToDisplay = this.props.users.slice(pageStart, pageEnd);
-
-            if (pageEnd < this.props.total) {
-                nextButton = (
-                    <button
-                        id='searchableUserListNextBtn'
-                        className='btn btn-link filter-control filter-control__next'
-                        onClick={this.nextPage}
-                        disabled={this.state.nextDisabled}
-                    >
-                        <FormattedMessage
-                            id='filtered_user_list.next'
-                            defaultMessage='Next'
-                        />
-                    </button>
-                );
-            }
-
-            if (this.props.page > 0) {
-                previousButton = (
-                    <button
-                        id='searchableUserListPrevBtn'
-                        className='btn btn-link filter-control filter-control__prev'
-                        onClick={this.previousPage}
-                    >
-                        <FormattedMessage
-                            id='filtered_user_list.prev'
-                            defaultMessage='Previous'
-                        />
-                    </button>
-                );
-            }
+            usersToDisplay = this.props.users.slice(0, pageEnd);
         }
 
         let filterRow;
@@ -260,20 +198,26 @@ class SearchableUserList extends React.PureComponent {
                     </div>
                 </div>
                 <div className='more-modal__list'>
-                    <UserList
-                        ref='userList'
-                        users={usersToDisplay}
-                        extraInfo={this.props.extraInfo}
-                        actions={this.props.actions}
-                        actionProps={this.props.actionProps}
-                        actionUserProps={this.props.actionUserProps}
-                        rowComponentType={this.props.rowComponentType}
-                        isDisabled={this.props.isDisabled}
-                    />
-                </div>
-                <div className='filter-controls'>
-                    {previousButton}
-                    {nextButton}
+                    <InfiniteScroll
+                        callBack={this.nextPage}
+                        styleClass='filtered-user-all'
+                        totalItems={this.props.total}
+                        itemsPerPage={this.props.usersPerPage}
+                        bufferValue={1500}
+                        pageNumber={this.props.page}
+                        loaderStyle={{padding: '0px', height: '40px'}}
+                    >
+                        <UserList
+                            ref='userList'
+                            users={usersToDisplay}
+                            extraInfo={this.props.extraInfo}
+                            actions={this.props.actions}
+                            actionProps={this.props.actionProps}
+                            actionUserProps={this.props.actionUserProps}
+                            rowComponentType={this.props.rowComponentType}
+                            isDisabled={this.props.isDisabled}
+                        />
+                    </InfiniteScroll>
                 </div>
             </div>
         );

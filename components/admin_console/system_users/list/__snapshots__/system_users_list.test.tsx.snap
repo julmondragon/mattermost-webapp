@@ -37,7 +37,6 @@ exports[`components/admin_console/system_users/list should match default snapsho
     nextPage={[Function]}
     onTermChange={[MockFunction]}
     page={0}
-    previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
     rowComponentType={
@@ -221,7 +220,6 @@ exports[`components/admin_console/system_users/list should match default snapsho
     nextPage={[Function]}
     onTermChange={[MockFunction]}
     page={0}
-    previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
     rowComponentType={
@@ -451,7 +449,6 @@ exports[`components/admin_console/system_users/list should match default snapsho
     nextPage={[Function]}
     onTermChange={[MockFunction]}
     page={0}
-    previousPage={[Function]}
     renderCount={[Function]}
     renderFilterRow={[MockFunction]}
     rowComponentType={

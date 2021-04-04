@@ -12,7 +12,7 @@ jest.mock('actions/admin_actions');
 jest.useFakeTimers();
 
 describe('components/admin_console/system_users', () => {
-    const USERS_PER_PAGE = 50;
+    const USERS_PER_PAGE = 30;
     const defaultProps = {
         teams: [],
         siteName: 'Site name',
@@ -55,7 +55,7 @@ describe('components/admin_console/system_users', () => {
         await wrapper.instance().loadDataForTeam(SearchUserTeamFilter.ALL_USERS, '');
 
         expect(getProfiles).toHaveBeenCalled();
-        expect(getProfiles).toHaveBeenCalledWith(0, Constants.PROFILE_CHUNK_SIZE, {});
+        expect(getProfiles).toHaveBeenCalledWith(0, USERS_PER_PAGE, {});
         expect(wrapper.state().loading).toEqual(false);
     });
 
@@ -69,13 +69,13 @@ describe('components/admin_console/system_users', () => {
         await wrapper.instance().loadDataForTeam(SearchUserTeamFilter.NO_TEAM, '');
 
         expect(loadProfilesWithoutTeam).toHaveBeenCalled();
-        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(0, Constants.PROFILE_CHUNK_SIZE, {});
+        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(0, USERS_PER_PAGE, {});
         expect(wrapper.state().loading).toEqual(false);
 
         await wrapper.instance().loadDataForTeam(SearchUserTeamFilter.NO_TEAM, UserFilters.INACTIVE);
 
         expect(loadProfilesWithoutTeam).toHaveBeenCalled();
-        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(0, Constants.PROFILE_CHUNK_SIZE, {inactive: true});
+        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(0, USERS_PER_PAGE, {inactive: true});
     });
 
     test('nextPage() should have called getProfiles', async () => {
@@ -92,7 +92,7 @@ describe('components/admin_console/system_users', () => {
         await wrapper.instance().nextPage(0);
 
         expect(getProfiles).toHaveBeenCalled();
-        expect(getProfiles).toHaveBeenCalledWith(1, USERS_PER_PAGE, {});
+        expect(getProfiles).toHaveBeenCalledWith(0, USERS_PER_PAGE, {});
         expect(wrapper.state().loading).toEqual(false);
     });
 
@@ -110,7 +110,7 @@ describe('components/admin_console/system_users', () => {
         await wrapper.instance().nextPage(0);
 
         expect(loadProfilesWithoutTeam).toHaveBeenCalled();
-        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(1, USERS_PER_PAGE, {});
+        expect(loadProfilesWithoutTeam).toHaveBeenCalledWith(0, USERS_PER_PAGE, {});
         expect(wrapper.state().loading).toEqual(false);
     });
 

@@ -3954,7 +3954,7 @@
   "system_notice.remind_me": "Remind me Later",
   "system_notice.title": "**Notice**\nfrom Mattermost",
   "system_users_list.count": "{count, number} {count, plural, one {user} other {users}}",
-  "system_users_list.countPage": "{startCount, number} - {endCount, number} {count, plural, one {user} other {users}} of {total, number} total",
+  "system_users_list.countPage": "{endCount, number} {count, plural, one {user} other {users}} of {total, number} total",
   "system_users_list.countSearch": "{count, number} {count, plural, one {user} other {users}} of {total, number} total",
   "team_channel_settings.group.group_user_row.numberOfGroups": "{amount, number} {amount, plural, one {Group} other {Groups}}",
   "team_import_tab.failure": " Import failure: ",

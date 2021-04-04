@@ -29,7 +29,7 @@ import {emitUserLoggedOutEvent} from 'actions/global_actions';
 import SystemUsersList from './list';
 
 const USER_ID_LENGTH = 26;
-const USERS_PER_PAGE = 50;
+const USERS_PER_PAGE = 30;
 
 type Props = {
 
@@ -147,14 +147,14 @@ export default class SystemUsers extends React.PureComponent<Props, State> {
 
         if (teamId === SearchUserTeamFilter.ALL_USERS) {
             await Promise.all([
-                getProfiles(0, Constants.PROFILE_CHUNK_SIZE, options),
+                getProfiles(0, USERS_PER_PAGE, options),
                 getStandardAnalytics(),
             ]);
         } else if (teamId === SearchUserTeamFilter.NO_TEAM) {
-            await loadProfilesWithoutTeam(0, Constants.PROFILE_CHUNK_SIZE, options);
+            await loadProfilesWithoutTeam(0, USERS_PER_PAGE, options);
         } else {
             await Promise.all([
-                loadProfilesAndTeamMembers(0, Constants.PROFILE_CHUNK_SIZE, teamId, options),
+                loadProfilesAndTeamMembers(0, USERS_PER_PAGE, teamId, options),
                 getTeamStats(teamId),
             ]);
         }
@@ -205,11 +205,11 @@ export default class SystemUsers extends React.PureComponent<Props, State> {
         const options = getUserOptionsFromFilter(filter);
 
         if (teamId === SearchUserTeamFilter.ALL_USERS) {
-            await getProfiles(page + 1, USERS_PER_PAGE, options);
+            await getProfiles(page, USERS_PER_PAGE, options);
         } else if (teamId === SearchUserTeamFilter.NO_TEAM) {
-            await loadProfilesWithoutTeam(page + 1, USERS_PER_PAGE, options);
+            await loadProfilesWithoutTeam(page, USERS_PER_PAGE, options);
         } else {
-            await loadProfilesAndTeamMembers(page + 1, USERS_PER_PAGE, teamId, options);
+            await loadProfilesAndTeamMembers(page, USERS_PER_PAGE, teamId, options);
         }
         this.setState({loading: false});
     }

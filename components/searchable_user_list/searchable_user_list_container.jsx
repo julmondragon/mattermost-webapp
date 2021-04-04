@@ -33,14 +33,15 @@ export default class SearchableUserListContainer extends React.PureComponent {
         this.setState({term});
     }
 
-    nextPage = () => {
-        this.setState({page: this.state.page + 1});
+    nextPage = async () => {
+        const {nextPage} = this.props;
+        const {page: currentPage} = this.state;
 
-        this.props.nextPage(this.state.page + 1);
-    }
+        const page = currentPage + 1;
 
-    previousPage = () => {
-        this.setState({page: this.state.page - 1});
+        this.setState({page});
+
+        await nextPage(page);
     }
 
     search = (term) => {
@@ -56,7 +57,6 @@ export default class SearchableUserListContainer extends React.PureComponent {
             <SearchableUserList
                 {...this.props}
                 nextPage={this.nextPage}
-                previousPage={this.previousPage}
                 search={this.search}
                 page={this.state.page}
                 term={this.state.term}

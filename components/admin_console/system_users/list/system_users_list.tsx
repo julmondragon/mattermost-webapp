@@ -99,14 +99,15 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
         return null;
     }
 
-    nextPage = () => {
-        this.setState({page: this.state.page + 1});
+    nextPage = async () => {
+        const {nextPage} = this.props;
+        const {page: currentPage} = this.state;
 
-        this.props.nextPage(this.state.page + 1);
-    }
+        const page = currentPage + 1;
 
-    previousPage = () => {
-        this.setState({page: this.state.page - 1});
+        this.setState({page});
+
+        await nextPage(page);
     }
 
     search = (term: string) => {
@@ -293,7 +294,7 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
                 return (
                     <FormattedMessage
                         id='system_users_list.countPage'
-                        defaultMessage='{startCount, number} - {endCount, number} {count, plural, one {user} other {users}} of {total, number} total'
+                        defaultMessage='{endCount, number} {count, plural, one {user} other {users}} of {total, number} total'
                         values={{
                             count,
                             startCount: startCount + 1,
@@ -345,7 +346,6 @@ export default class SystemUsersList extends React.PureComponent<Props, State> {
                         isDisabled: this.props.isDisabled,
                     }}
                     nextPage={this.nextPage}
-                    previousPage={this.previousPage}
                     search={this.search}
                     page={this.state.page}
                     term={this.props.term}
